@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Program Form – VolunTrack</title><link rel="stylesheet" href="css/style.css"></head><body><div class="layout"><aside><div class="brand"><i>💙</i>Volun<span>Track</span></div><nav><a href="admin-dashboard.html" class="">📊 Dashboard</a><a href="manage-programs.html" class="on">📅 Manage Programs</a><a href="applications.html">📝 Applications</a><a href="attendance.html">🗓️ Attendance</a></nav><a class="out" href="login.html">⎋ Logout</a></aside><main><div class="top"><h2>Add / Edit Program</h2><div class="who"><div class="av">AS</div><div>Admin<small>Admin / Staff</small></div></div></div>
+<section class="card"><h3 id="ft">Add New Program</h3>
+<!-- JSP: <form action="ProgramServlet" method="post" enctype="multipart/form-data"> with hidden fields action=add|update and programId -->
+<form id="f" onsubmit="return save(event)"><div class="fg">
+<div><label>Program Name *</label><input id="title"></div><div><label>Category *</label><select id="cat"><option>Environment</option><option>Community</option><option>Charity</option><option>Health</option><option>Education</option></select></div>
+<div><label>Start Date *</label><input id="sd" type="date"></div><div><label>End Date *</label><input id="ed" type="date"></div>
+<div><label>Registration Deadline *</label><input id="dl" type="date"></div><div><label>Status *</label><select id="status"><option value="OPEN">Open</option><option value="CLOSED">Closed</option></select></div>
+<div><label>Start Time</label><input id="st" type="time" value="08:00"></div><div><label>End Time</label><input id="en" type="time" value="12:00"></div>
+<div><label>Location *</label><input id="loc"></div><div><label>Participant Quota *</label><input id="quota" type="number" min="1" value="30"></div>
+<div><label>Volunteer Hours *</label><input id="hrs" type="number" min="1" value="4"></div></div>
+<label>Description</label><textarea id="desc" rows="3"></textarea>
+<label>Program Image <small>(optional)</small></label><div class="cell"><div id="pv" class="img pv c-Environment">🌿</div><input type="file" accept="image/*" onchange="prev(this)"></div>
+<div class="err" id="err"></div><div class="row"><button class="btn">Save Program</button><a class="btn ghost" href="manage-programs.html">Cancel</a></div></form></section><div id="toast"></div>
+</main></div><script>
+const pid=new URLSearchParams(location.search).get('id');
+if(pid){document.getElementById('ft').textContent='Edit Program';/* JSP: fill fields from the program bean */
+ const d={1:['Community Clean-Up','Environment','2026-11-15','2026-11-15','2026-11-10','OPEN','UiTM Shah Alam',50,5]}[pid];if(d){title.value=d[0];cat.value=d[1];sd.value=d[2];ed.value=d[3];dl.value=d[4];status.value=d[5];loc.value=d[6];quota.value=d[7];hrs.value=d[8]}}
+function prev(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{pv.textContent='';pv.style.backgroundImage='url('+r.result+')'};r.readAsDataURL(f)}
+function save(e){e.preventDefault();const b=!title.value.trim()?'Program name is required.':!sd.value?'Please choose the start date.':!ed.value?'Please choose the end date.':ed.value<sd.value?'End date cannot be before the start date.':!dl.value?'Please set a registration deadline.':dl.value>sd.value?'Deadline cannot be after the start date.':!loc.value.trim()?'Location is required.':!(+quota.value>=1&&+hrs.value>=1)?'Quota and hours must be at least 1.':'';
+ if(b){err.textContent=b;return false}err.textContent='';const t=document.getElementById('toast');t.textContent='Program saved';t.className='show';setTimeout(()=>location.href='manage-programs.html',900);return false}
+</script></body></html>
