@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Attendance – VolunTrack</title>
+  
+<link rel="stylesheet" href="../css/attendance.css"></head>
+<body>
+<div class="layout">
+  <aside>
+    <div class="brand"><i>💙</i>Volun<span>Track</span></div>
+    <nav>
+      <a href="admin-dashboard.html">📊 Dashboard</a>
+      <a href="manage-programs.html">📅 Manage Programs</a>
+      <!-- Added the sideBadge span here -->
+      <a href="applications.html">📝 Applications <span id="sideBadge" style="background:#f59e0b;color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;margin-left:auto; display:none;">0</span></a>
+      <a href="attendance.html" class="on">🗓️ Attendance</a>
+    </nav>
+    <a class="out" href="../volunteer/login.html">⎋ Logout</a>
+  </aside>
+  
+  <main>
+    <div class="top">
+      <h2>Attendance</h2>
+      <div class="who"><div class="av">AS</div><div>Admin<small>Admin / Staff</small></div></div>
+    </div>
+
+    <div class="flt">
+      <select id="programSelect">
+        <option value="Community Clean-Up">Community Clean-Up (15 Nov 2026)</option>
+        <option value="Tree Planting">Tree Planting (5 Dec 2026)</option>
+        <option value="Campus Recycling Day">Campus Recycling Day (30 Sept 2026)</option>
+      </select>
+    </div>
+
+    <section class="card">
+      <h3>Attendance Management</h3>
+      <div class="tw">
+        <table id="attTable">
+          <thead>
+            <tr><th>VOLUNTEER NAME</th><th>APPLICATION ID</th><th>ATTENDANCE</th></tr>
+          </thead>
+          <tbody id="attTableBody">
+            <!-- Injected by JS -->
+          </tbody>
+        </table>
+        <div id="emptyState" style="display:none; padding: 20px; color: #64748b; text-align: center;">
+          No approved volunteers for this program yet.
+        </div>
+      </div>
+      
+      <div class="save-row">
+        <button class="btn btn-green" id="saveBtn" onclick="saveAttendance()">Save Attendance</button>
+        <button class="btn btn-blue" id="editBtn" onclick="enableEdit()" style="display:none;">Edit Attendance</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const applicants = [
+  { id: 'APP010', name: 'Nurul Aisyah', program: 'Tree Planting' },
+  { id: 'APP009', name: 'Amirul Wong', program: 'Campus Recycling Day' },
+  { id: 'APP008', name: 'Amirul Wong', program: 'Community Clean-Up' },
+  { id: 'APP001', name: 'Ahmad Hakim', program: 'Community Clean-Up' },
+  { id: 'APP002', name: 'Siti Aminah', program: 'Community Clean-Up' },
+  { id: 'APP003', name: 'John Doe', program: 'Tree Planting' },
+  { id: 'APP004', name: 'Jane Smith', program: 'Campus Recycling Day' }
+];
+
+let isEditMode = false;
+
+function loadAttendance() {
+  const selectedProgram = document.getElementById('programSelect').value;
+  const tbody = document.getElementById('attTableBody');
+  const emptyMsg = document.getElementById('emptyState');
+  
+  const savedStatuses = JSON.parse(localStorage.getItem('voluntrack_statuses') || '{}');
+  const savedAtt = JSON.parse(localStorage.getItem('voluntrack_attendance') || '{}');
+  
+  tbody.innerHTML = '';
+  let count = 0;
+
+  applicants.forEach(person => {
+    if (savedStatuses[person.id] === 'approved' && person.program === selectedProgram) {
+      count++;
+      const currentAtt = savedAtt[person.id] || 'NOT_RECORDED';
+      const row = document.createElement('tr');
+      
+      row.innerHTML = `
+        <td><b>${person.name}</b></td>
+        <td>${person.id}</td>
+        <td>
+          <select class="att-sel" data-id="${person.id}" ${isEditMode ? '' : 'disabled'}>
+            <option value="NOT_RECORDED" ${currentAtt === 'NOT_RECORDED' ? 'selected' : ''}>Not recorded</option>
+            <option value="PRESENT" ${currentAtt === 'PRESENT' ? 'selected' : ''}>Present</option>
+            <option value="ABSENT" ${currentAtt === 'ABSENT' ? 'selected' : ''}>Absent</option>
+          </select>
+        </td>
+      `;
+      tbody.appendChild(row);
+    }
+  });
+
+  emptyMsg.style.display = count === 0 ? 'block' : 'none';
+}
+
+function enableEdit() {
+  isEditMode = true;
+  loadAttendance(); 
+  document.getElementById('editBtn').style.display = 'none';
+  document.getElementById('saveBtn').style.display = 'inline-block';
+}
+
+function saveAttendance() {
+  const dropdowns = document.querySelectorAll('.att-sel');
+  if(dropdowns.length === 0) return showToast("No students to save.");
+
+  const savedAtt = JSON.parse(localStorage.getItem('voluntrack_attendance') || '{}');
+  dropdowns.forEach(select => {
+    savedAtt[select.dataset.id] = select.value;
+  });
+
+  localStorage.setItem('voluntrack_attendance', JSON.stringify(savedAtt));
+  showToast("Attendance saved successfully!");
+  
+  isEditMode = false;
+  loadAttendance(); 
+  document.getElementById('saveBtn').style.display = 'none';
+  document.getElementById('editBtn').style.display = 'inline-block';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show';
+  setTimeout(() => t.className = '', 2500);
+}
+
+document.getElementById('programSelect').addEventListener('change', () => {
+  isEditMode = true;
+  loadAttendance();
+  document.getElementById('saveBtn').style.display = 'inline-block';
+  document.getElementById('editBtn').style.display = 'none';
+});
+
+window.onload = function() {
+  isEditMode = true; 
+  loadAttendance();
+  document.getElementById('saveBtn').style.display = 'inline-block';
+  document.getElementById('editBtn').style.display = 'none';
+
+  // --- THIS IS THE MAGIC PART ---
+  // Load the saved badge count from the Applications page
+  const savedCount = localStorage.getItem('voluntrack_pending_count');
+  const sideBadge = document.getElementById('sideBadge');
+  
+  if (savedCount !== null && sideBadge) {
+    sideBadge.textContent = savedCount;
+    // Only show the badge if the number is greater than 0
+    if (parseInt(savedCount) > 0) {
+      sideBadge.style.display = 'inline-block';
+    } else {
+      sideBadge.style.display = 'none';
+    }
+  }
+};
+</script>
+</body>
+</html>
