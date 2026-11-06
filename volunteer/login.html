@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><head>
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Volter – Login</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/login.css">
+<link rel="stylesheet" href="../css/login.css">
 </head>
 
 <body>
@@ -89,8 +89,7 @@
     var m=document.getElementById('lmsg');
     if(!re.test(document.getElementById('lemail').value)) return show(m,'err','Please enter a valid university email.');
     if(!document.getElementById('lpass').value) return show(m,'err','Please enter your password.');
-    show(m,'ok','Signed in. Connect this form to your backend to continue.');
-    // TODO: send credentials to your server, then redirect e.g. window.location.href='dashboard.html';
+    show(m,'ok','Signed in. Redirecting...');var r=document.querySelector('[data-role].on');setTimeout(function(){window.location.href=(r&&r.dataset.role==='admin')?'../admin/admin-dashboard.html':'volunteer-dashboard.html';},700);
   });
 })();
 </script>

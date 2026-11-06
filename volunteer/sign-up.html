@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VolunTrack – Sign Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/sign-up.css"></head>
+<body>
+<div class="shell">
+  <aside class="hero">
+    <svg class="deco" viewBox="0 0 200 200" fill="#fff"><path d="M100 10 10 60h180zM25 70h22v90H25zm44 0h22v90H69zm40 0h22v90h-22zm44 0h22v90h-22zM10 168h180v22H10z"/></svg>
+    <div class="brand">
+      <span class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="#2563eb"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 3 5 6.3 5c2 0 3.7 1.1 5.7 3.2C14 6.1 15.700 5 17.700 5 21 5 23.100 8.200 21.600 11.700 19.500 16.400 12 21 12 21z"/></svg></span>
+      <span>Volun <b>Track</b></span>
+    </div>
+    <div class="hero-body">
+      <div class="tag">🎓 Northbridge University</div>
+      <h1>Give your time.<br>Grow your impact.</h1>
+      <p>Connect with meaningful causes, build new skills, and turn your university years into lasting change.</p>
+      <div class="stats">
+        <div><strong>250</strong><span>student volunteers</span></div>
+        <div><strong>8</strong><span>community programs</span></div>
+        <div><strong>1,240</strong><span>hours of impact</span></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top"><span>University Volunteer Portal</span><a href="login.html">Need help?</a></div>
+    <div class="center">
+
+      <section class="view active" id="signup">
+        <div class="eyebrow">Join the community</div>
+        <h2>Create your account.</h2>
+        <p class="sub">Sign up with your university email to start volunteering today.</p>
+        <div class="card">
+          <form id="signForm" novalidate>
+            <div class="row2">
+              <div>
+                <label for="sname">Full name</label>
+                <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>
+                <input id="sname" type="text" placeholder="Aisha Rahman" autocomplete="name"></div>
+              </div>
+              <div>
+                <label for="sid">Student ID</label>
+                <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h4M7 14h8"/></svg>
+                <input id="sid" type="text" placeholder="2024123456"></div>
+              </div>
+            </div>
+            <label for="semail">University email</label>
+            <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+              <input id="semail" type="email" placeholder="name@northbridge.edu" autocomplete="email"></div>
+            <div class="row2">
+              <div>
+                <label for="spass">Password</label>
+                <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                <input id="spass" type="password" placeholder="Min. 8 characters" autocomplete="new-password">
+                <button class="eye" type="button" aria-label="Show password" data-eye="spass">👁</button></div>
+              </div>
+              <div>
+                <label for="sconf">Confirm password</label>
+                <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                <input id="sconf" type="password" placeholder="Repeat password" autocomplete="new-password"></div>
+              </div>
+            </div>
+            <div class="opts"><label><input type="checkbox" id="terms"> I agree to the Terms of use and Privacy policy</label></div>
+            <button class="btn" type="submit">＋ Create account</button>
+            <div class="msg" id="smsg"></div>
+          </form>
+          <p class="alt">Already have an account? <a class="link" href="login.html">Log in</a></p>
+          <div class="secure">🛡️ Secure access with your university credentials</div>
+        </div>
+      </section>
+
+    </div>
+    <div class="foot">© 2026 Northbridge University · Privacy policy · Terms of use</div>
+  </main>
+</div>
+
+<script>
+(function(){
+  document.querySelectorAll('[data-eye]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var i=document.getElementById(b.dataset.eye);
+      i.type=i.type==='password'?'text':'password';
+    });
+  });
+  function show(el,type,text){el.className='msg '+type;el.textContent=text;}
+  var re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  document.getElementById('signForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    var m=document.getElementById('smsg');
+    if(!document.getElementById('sname').value.trim()) return show(m,'err','Please enter your full name.');
+    if(!document.getElementById('sid').value.trim()) return show(m,'err','Please enter your student ID.');
+    if(!re.test(document.getElementById('semail').value)) return show(m,'err','Please enter a valid university email.');
+    if(document.getElementById('spass').value.length<8) return show(m,'err','Password must be at least 8 characters.');
+    if(document.getElementById('spass').value!==document.getElementById('sconf').value) return show(m,'err','Passwords do not match.');
+    if(!document.getElementById('terms').checked) return show(m,'err','Please accept the terms to continue.');
+    show(m,'ok','Account created. Redirecting to login...');setTimeout(function(){window.location.href='login.html';},900);
+  });
+})();
+</script>
+</body>
+</html>

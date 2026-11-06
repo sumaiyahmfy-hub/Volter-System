@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Applications – VolunTrack</title>
+  
+  
+<link rel="stylesheet" href="../css/applications.css"></head>
+<body>
+<div class="layout">
+  <aside>
+    <div class="brand"><i>💙</i>Volun<span>Track</span></div>
+    <nav>
+      <a href="admin-dashboard.html">📊 Dashboard</a>
+      <a href="manage-programs.html">📅 Manage Programs</a>
+      <a href="applications.html" class="on">📝 Applications <span id="sideBadge" style="background:#f59e0b;color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;margin-left:auto;">0</span></a>
+      <a href="attendance.html">🗓️ Attendance</a>
+    </nav>
+    <a class="out" href="../volunteer/login.html">⎋ Logout</a>
+  </aside>
+  
+  <main>
+    <!-- ================= MAIN LIST VIEW ================= -->
+    <div id="listView">
+      <div class="top">
+        <h2>Applications</h2>
+        <div class="who"><div class="av">AS</div><div>Admin<small>Admin / Staff</small></div></div>
+      </div>
+
+      <div class="flt">
+        <select id="programFilter" onchange="filterData()">
+          <option value="">All Programs</option>
+          <option value="Community Clean-Up">Community Clean-Up</option>
+          <option value="Tree Planting">Tree Planting</option>
+          <option value="Campus Recycling Day">Campus Recycling Day</option>
+        </select>
+      </div>
+
+      <section class="card">
+        <h3>Application Management</h3>
+        <div class="tw">
+          <table id="appTable">
+            <thead>
+              <tr>
+                <th>APPLICATION ID</th><th>VOLUNTEER NAME</th><th>PROGRAM</th>
+                <th>DATE</th><th>STATUS</th><th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-id="APP010" data-program="Tree Planting" data-name="Nurul Aisyah" data-date="29 Oct 2026">
+                <td>APP010</td>
+                <td><b>Nurul Aisyah</b></td>
+                <td>Tree Planting</td>
+                <td>29 Oct 2026</td>
+                <td><span class="badge pending">Pending</span></td>
+                <td><button class="btn ghost sm" onclick="openDetails(this)">View</button></td>
+              </tr>
+              <tr data-id="APP009" data-program="Campus Recycling Day" data-name="Amirul Wong" data-date="30 Sept 2026">
+                <td>APP009</td>
+                <td><b>Amirul Wong</b></td>
+                <td>Campus Recycling Day</td>
+                <td>30 Sept 2026</td>
+                <td><span class="badge approved">Approved</span></td>
+                <td><button class="btn ghost sm" onclick="openDetails(this)">View</button></td>
+              </tr>
+              <tr data-id="APP008" data-program="Community Clean-Up" data-name="Amirul Wong" data-date="28 Oct 2026">
+                <td>APP008</td>
+                <td><b>Amirul Wong</b></td>
+                <td>Community Clean-Up</td>
+                <td>28 Oct 2026</td>
+                <td><span class="badge pending">Pending</span></td>
+                <td><button class="btn ghost sm" onclick="openDetails(this)">View</button></td>
+              </tr>
+              <tr data-id="APP001" data-program="Community Clean-Up" data-name="Ahmad Hakim" data-date="29 Oct 2026">
+                <td>APP001</td>
+                <td><b>Ahmad Hakim</b></td>
+                <td>Community Clean-Up</td>
+                <td>29 Oct 2026</td>
+                <td><span class="badge pending">Pending</span></td>
+                <td><button class="btn ghost sm" onclick="openDetails(this)">View</button></td>
+              </tr>
+              <tr data-id="APP002" data-program="Community Clean-Up" data-name="Siti Aminah" data-date="1 Nov 2026">
+                <td>APP002</td>
+                <td><b>Siti Aminah</b></td>
+                <td>Community Clean-Up</td>
+                <td>1 Nov 2026</td>
+                <td><span class="badge pending">Pending</span></td>
+                <td><button class="btn ghost sm" onclick="openDetails(this)">View</button></td>
+              </tr>
+              <tr data-id="APP003" data-program="Tree Planting" data-name="John Doe" data-date="2 Nov 2026">
+                <td>APP003</td>
+                <td><b>John Doe</b></td>
+                <td>Tree Planting</td>
+                <td>2 Nov 2026</td>
+                <td><span class="badge pending">Pending</span></td>
+                <td><button class="btn ghost sm" onclick="openDetails(this)">View</button></td>
+              </tr>
+              <tr data-id="APP004" data-program="Campus Recycling Day" data-name="Jane Smith" data-date="3 Nov 2026">
+                <td>APP004</td>
+                <td><b>Jane Smith</b></td>
+                <td>Campus Recycling Day</td>
+                <td>3 Nov 2026</td>
+                <td><span class="badge pending">Pending</span></td>
+                <td><button class="btn ghost sm" onclick="openDetails(this)">View</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= DETAIL VIEW ================= -->
+    <div id="detailView" style="display:none;">
+      <div class="top" style="margin-bottom: 20px;">
+        <h2>Applications</h2>
+        <div class="who"><div class="av">AS</div><div>Admin<small>Admin / Staff</small></div></div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <button class="btn ghost" onclick="backToList()" style="padding: 6px 12px; font-size: 13px;">← Back to Applications</button>
+        <span id="detailStatusBadge" class="badge badge-lg pending">Pending</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+        <section class="card" style="margin-bottom: 0;">
+          <h3>Volunteer Information</h3>
+          <div style="display: grid; grid-template-columns: 130px 1fr; gap: 12px; font-size: 14px;">
+            <span style="color:#64748b">Full Name</span><span id="dtName" style="font-weight:500">-</span>
+            <span style="color:#64748b">Email</span><span id="dtEmail" style="font-weight:500">-</span>
+            <span style="color:#64748b">Phone</span><span style="font-weight:500">0145678901</span>
+          </div>
+        </section>
+        
+        <section class="card" style="margin-bottom: 0;">
+          <h3>Program Information</h3>
+          <div style="display: grid; grid-template-columns: 130px 1fr; gap: 12px; font-size: 14px;">
+            <span style="color:#64748b">Program Name</span><span id="dtProg" style="font-weight:500">-</span>
+            <span style="color:#64748b">Date</span><span id="dtDate" style="font-weight:500">-</span>
+            <span style="color:#64748b">Location</span><span style="font-weight:500">UiTM Shah Alam</span>
+            <span style="color:#64748b">Volunteer Hours</span><span style="font-weight:500">5 hours</span>
+          </div>
+        </section>
+      </div>
+
+      <section class="card">
+        <h3>Application Information</h3>
+        <div style="display: grid; grid-template-columns: 160px 1fr; gap: 12px; font-size: 14px;">
+          <span style="color:#64748b">Application ID</span><span id="dtAppId" style="font-weight:500">-</span>
+          <span style="color:#64748b">Submitted Date</span><span id="dtSubmitted" style="font-weight:500">-</span>
+          <span style="color:#64748b">Reason for Joining</span><span style="font-weight:500">Interested in community service and making an impact.</span>
+          <span style="color:#64748b">Previous Experience</span><span style="font-weight:500">Campus volunteer</span>
+        </div>
+        
+        <div class="row" id="actionButtons" style="margin-top: 25px;">
+          <button class="btn" style="background-color: #16a34a; color: white;" onclick="openModal('Approve')">Approve</button>
+          <button class="btn" style="background-color: #dc2626; color: white;" onclick="openModal('Reject')">Reject</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="ov" id="actionModal">
+  <div class="mdl">
+    <h3>Confirm Action</h3>
+    <div style="display:grid; grid-template-columns: 80px 1fr; gap:10px; margin-bottom:15px; font-size:14px;">
+      <span style="color:#64748b">Volunteer</span> <strong id="mdlStudent">-</strong>
+      <span style="color:#64748b">Program</span> <strong id="mdlProgram">-</strong>
+    </div>
+    
+    <label>Action</label>
+    <select id="mdlActionSelect" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #ccc;">
+      <option value="approved">Approve Application</option>
+      <option value="rejected">Reject Application</option>
+    </select>
+
+    <div class="row" style="margin-top: 10px;">
+      <button class="btn" style="background-color: #16a34a; color: white;" onclick="submitAction()">Confirm</button>
+      <button class="btn ghost" onclick="document.getElementById('actionModal').classList.remove('show')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentRow = null;
+
+// --- NEW EMAIL GENERATOR ---
+function getEmail(name) {
+  const cleanName = name.toLowerCase().replace(/\s+/g, '');
+  // Randomly pick between gmail and yahoo
+  const domains = ['@gmail.com', '@yahoo.com'];
+  const randomDomain = domains[Math.floor(Math.random() * domains.length)];
+  return cleanName + randomDomain;
+}
+
+function updateBadgeCount() {
+  let count = 0;
+  document.querySelectorAll('#appTable .badge.pending').forEach(b => count++);
+  const sideBadge = document.getElementById('sideBadge');
+  if(sideBadge) sideBadge.textContent = count;
+  localStorage.setItem('voluntrack_pending_count', count);
+}
+
+window.onload = function() {
+  const saved = JSON.parse(localStorage.getItem('voluntrack_statuses') || '{}');
+  document.querySelectorAll('#appTable tbody tr').forEach(row => {
+    const id = row.dataset.id;
+    if (saved[id]) {
+      const badge = row.querySelector('.badge');
+      badge.className = 'badge ' + saved[id];
+      badge.textContent = saved[id].charAt(0).toUpperCase() + saved[id].slice(1);
+    }
+  });
+  updateBadgeCount();
+};
+
+function filterData() {
+  const prog = document.getElementById('programFilter').value;
+  document.querySelectorAll('#appTable tbody tr').forEach(row => {
+    const matchProg = prog === '' || row.dataset.program === prog;
+    row.style.display = matchProg ? '' : 'none';
+  });
+}
+
+function openDetails(btn) {
+  currentRow = btn.closest('tr');
+  const appId = currentRow.dataset.id;
+  const name = currentRow.dataset.name;
+  
+  document.getElementById('dtName').textContent = name;
+  document.getElementById('dtEmail').textContent = getEmail(name);
+  document.getElementById('dtProg').textContent = currentRow.dataset.program;
+  document.getElementById('dtDate').textContent = currentRow.dataset.date;
+  document.getElementById('dtAppId').textContent = appId;
+  document.getElementById('dtSubmitted').textContent = currentRow.dataset.date;
+  
+  const savedStatuses = JSON.parse(localStorage.getItem('voluntrack_statuses') || '{}');
+  const status = savedStatuses[appId] || 'pending';
+
+  document.getElementById('detailStatusBadge').className = 'badge badge-lg ' + status;
+  document.getElementById('detailStatusBadge').textContent = status.charAt(0).toUpperCase() + status.slice(1);
+
+  const actionDiv = document.getElementById('actionButtons');
+  if (status.toLowerCase() === 'pending') {
+    actionDiv.style.display = 'flex';
+  } else {
+    actionDiv.style.display = 'none'; 
+  }
+
+  document.getElementById('listView').style.display = 'none';
+  document.getElementById('detailView').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+function backToList() {
+  document.getElementById('detailView').style.display = 'none';
+  document.getElementById('listView').style.display = 'block';
+}
+
+function openModal(action) {
+  document.getElementById('mdlStudent').textContent = currentRow.dataset.name;
+  document.getElementById('mdlProgram').textContent = currentRow.dataset.program;
+  document.getElementById('mdlActionSelect').value = action === 'Approve' ? 'approved' : 'rejected';
+  document.getElementById('actionModal').classList.add('show');
+}
+
+function submitAction() {
+  const newStatus = document.getElementById('mdlActionSelect').value;
+  const appId = currentRow.dataset.id;
+
+  const badge = currentRow.querySelector('.badge');
+  badge.className = 'badge ' + newStatus;
+  badge.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+
+  const saved = JSON.parse(localStorage.getItem('voluntrack_statuses') || '{}');
+  saved[appId] = newStatus;
+  localStorage.setItem('voluntrack_statuses', JSON.stringify(saved));
+
+  document.getElementById('actionModal').classList.remove('show');
+  
+  document.getElementById('detailStatusBadge').className = 'badge badge-lg ' + newStatus;
+  document.getElementById('detailStatusBadge').textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+  document.getElementById('actionButtons').style.display = 'none';
+
+  updateBadgeCount();
+}
+</script>
+</body>
+</html>
